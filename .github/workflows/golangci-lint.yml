@@ -1,29 +1,28 @@
-name: goreleaser
+name: Build and Upload Artifacts
 
 on:
   workflow_dispatch:
 
 jobs:
-  goreleaser:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.22'
-          
-      - name: Make All
+
+      - name: Build Go project
         run: |
-          ./package.sh
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v5
+          go build -o myapp
+          mkdir -p dist
+          mv myapp dist/
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
         with:
-          version: latest
-          args: release --clean --release-notes=./Release.md
-        env:
-          GITHUB_TOKEN: ${{ secrets.GPR_TOKEN }}
+          name: myapp
+          path: dist/myapp
