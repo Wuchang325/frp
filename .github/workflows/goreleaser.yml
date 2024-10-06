@@ -20,3 +20,8 @@ jobs:
       - name: Make All
         run: |
           ./package.sh
+      - name: Upload GoReleaser artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-artifacts
+          path: dist/*
