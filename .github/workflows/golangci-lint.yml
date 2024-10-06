@@ -1,10 +1,10 @@
-name: Build Go Project
+name: goreleaser
 
 on:
   workflow_dispatch:
 
 jobs:
-  build:
+  goreleaser:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,15 +16,14 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.22'
-
+          
       - name: Make All
         run: |
-          go build -o myapp
-          mkdir -p dist
-          mv myapp dist/
-
-      - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+          ./package.sh
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v5
         with:
-          name: myapp
-          path: dist/myapp
+          version: latest
+          args: release --clean --release-notes=./Release.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GPR_TOKEN }}
