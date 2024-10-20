@@ -26,4 +26,3 @@ jobs:
            name: my-artifacts
            path: |
              /home/runner/work/frp/frp/release/packages/*
-
